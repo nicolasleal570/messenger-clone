@@ -1,0 +1,38 @@
+<template>
+    <b-list-group-item :variant="variant">
+        <b-row align-h="center">
+            <b-col cols="12" md="3" class="text-center">
+                <b-img rounded="circle"
+                    blank width="60" height="60"
+                    blank-color="#777" alt="Person"    
+                ></b-img>
+            </b-col>
+            <b-col cols="6" align-self="center" class="d-none d-md-block">
+                <p class="mb-1">{{ name }}</p>
+                <p class="text-muted small mb-0">{{ lastMessage }}</p>
+            </b-col>
+            <b-col cols="3" align-self="center" class="d-none d-md-block">
+                <p class="mb-0">{{ lastTime }}</p>
+            </b-col>
+        </b-row>
+    </b-list-group-item>
+</template>
+
+<script>
+    export default {
+        props: [
+            'variant'
+        ],
+        data(){
+            return {
+                name: 'Fabiana Gomez',
+                lastMessage: 'Tú: Hola que tal?',
+                lastTime: '1:37pm'
+            }
+        },
+        mounted(){
+            console.log('Component mounted');
+            
+        }
+    }
+</script>
