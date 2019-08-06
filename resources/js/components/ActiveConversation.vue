@@ -2,43 +2,22 @@
     <b-row class="h-100">
         <b-col cols="8" class="h-100">
             <b-card title="Conversación Activa" class="h-100">
-                
-                <b-card class="my-2">
-                    <b-media vertical-align="center">
-                        <b-img slot="aside"
-                            rounded="circle"
-                            blank width="60" height="60"
-                            blank-color="#777" alt="Person"    
-                        ></b-img>
 
-                        <p class="mb-0">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Pariatur, assumenda.
-                        </p>
-                    </b-media>
-                </b-card>
-
-                <b-card class="my-2">
-                    <b-media right-align vertical-align="center">
-                        <b-img slot="aside"
-                            rounded="circle"
-                            blank width="60" height="60"
-                            blank-color="#777" alt="Person"    
-                        ></b-img>
-
-                        <p class="mb-0">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Pariatur, assumenda.
-                        </p>
-                    </b-media>
-                </b-card>
-
+                <message-conversation-component 
+                    v-for="message in messages"
+                    :key="message.id"
+                    :written-by-me="message.written_by_me"
+                >
+                    {{ message.content }}
+                </message-conversation-component>
 
                 <!-- BTN ENVIAR MENSAJE -->
                 <div slot="footer">
-                    <b-form class="mb-0">
+                    <b-form @submit.prevent="postMessage" class="mb-0">
                         <b-input-group>
-                            <b-form-input type="text" placeholder="Escribe tu mensaje..."></b-form-input>
+                            <b-form-input autocomplete="off" type="text" v-model="newMessage" placeholder="Escribe tu mensaje..."></b-form-input>
                             <b-input-group-append>
-                                <b-btn variant="primary">Enviar</b-btn>
+                                <b-btn type="submit" variant="primary">Enviar</b-btn>
                             </b-input-group-append>
                         </b-input-group>
                     </b-form>
@@ -61,12 +40,36 @@
     export default {
         data(){
             return{
+                messages: [],
+                newMessage: '',
 
             }
         },
         mounted(){
-            console.log('Component mounted');
-            
+            this.getMessages()
+        },
+        methods: {
+            getMessages(){
+                // Obteniendo los mensajes
+                axios.get('/api/messages')
+                    .then((response) => {
+                        this.messages = response.data;
+                    });
+            },
+            postMessage(){
+                const params = {
+                    to_id: 2,
+                    content: this.newMessage,
+                }
+                axios.post('/api/messages', params)
+                    .then((response) => {
+                        // console.log(response.data);
+                        if (response.data) {
+                            this.newMessage = '';
+                            this.getMessages();
+                        }
+                    });
+            }
         }
     }
 </script>
