@@ -14,6 +14,9 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call(UsersTableSeeder::class);
+
+        factory(User::class, 10)->create();
+
         $this->call(ConversationsTableSeeder::class);
         $this->call(MessagesTableSeeder::class);
 

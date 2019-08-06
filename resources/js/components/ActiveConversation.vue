@@ -42,6 +42,7 @@
             return{
                 messages: [],
                 newMessage: '',
+                contactId: 2,
 
             }
         },
@@ -51,7 +52,7 @@
         methods: {
             getMessages(){
                 // Obteniendo los mensajes
-                axios.get('/api/messages')
+                axios.get(`/api/messages?contact_id=${this.contactId}`)
                     .then((response) => {
                         this.messages = response.data;
                     });

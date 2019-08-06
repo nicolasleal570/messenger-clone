@@ -13,12 +13,22 @@ class MessageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $userId = auth()->id();
+        $contactId = $request->contact_id;
 
-        return Message::select('id', DB::raw("IF(`from_id`=$userId, TRUE, FALSE) as written_by_me"), 'created_at', 'content')
-            ->get();
+        return Message::select('id', DB::raw("IF(`from_id`=$userId, TRUE, FALSE) as written_by_me"), 'from_id', 'to_id', 'created_at', 'content')
+
+        ->where(function ($query) use ($userId, $contactId) {
+            $query->where('from_id', $userId)->where('to_id', $contactId);
+        })
+        
+        ->orWhere(function ($query) use ($userId, $contactId) {
+            $query->where('from_id', $contactId)->where('to_id', $userId);
+        })
+
+        ->get();
     }
 
     /**
