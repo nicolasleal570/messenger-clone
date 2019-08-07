@@ -14,10 +14,8 @@
                     v-for="conversation in conversations"
                     :key="conversation.id"
                     :conversation="conversation"
+                    @click.native="selectConversation(conversation)"
                 ></contact-component>
-            <!-- <contact-component variant="primary"></contact-component>
-            <contact-component></contact-component>
-            <contact-component variant="secondary"></contact-component> -->
         </b-list-group>
     </div>
 </template>
@@ -36,6 +34,9 @@ export default {
                 axios.get('/api/conversations').then((response) => {
                     this.conversations = response.data;
                 });
+            },
+            selectConversation(conversation){
+                this.$emit('conversationSelected', conversation); // Evento que se emite
             }
         }
     }

@@ -38,11 +38,13 @@
 </template>
 <script>
     export default {
+        props: {
+            contactId : Number,
+        },
         data(){
             return{
                 messages: [],
                 newMessage: '',
-                contactId: 2,
 
             }
         },
@@ -70,6 +72,11 @@
                             this.getMessages();
                         }
                     });
+            }
+        },
+        watch: {
+            contactId(value) { // Actualiza los mensajes segun el contacto
+                this.getMessages();
             }
         }
     }
