@@ -57,3 +57,6 @@ window.Echo = new Echo({
     encrypted: true,
     forceTLS: true
 });
+
+// Date & Time 
+window.Moment = require('moment');

@@ -12,7 +12,7 @@
                 <p class="text-muted small mb-0">{{ conversation.last_message }}</p>
             </b-col>
             <b-col cols="3" align-self="center" class="d-none d-md-block">
-                <p class="mb-0">{{ conversation.last_time }}</p>
+                <p class="mb-0">{{ lastTime }}</p>
             </b-col>
         </b-row>
     </b-list-group-item>
@@ -32,6 +32,11 @@
         },
         methods: {
             
+        },
+        computed: {
+            lastTime() {
+                return Moment(this.conversation.last_time, "YYYY-MM-DD hh:mm:ss").locale('es').fromNow();
+            }
         }
     }
 </script>

@@ -57,7 +57,7 @@ export default {
     };
   },
   mounted() {
-    // this.getMessages();
+
   },
   methods: {
     postMessage() {
@@ -67,9 +67,14 @@ export default {
       };
       axios.post("/api/messages", params).then(response => {
         // console.log(response.data);
-        if (response.data) {
+        if (response.data.success) {
+
           this.newMessage = "";
-          // this.getMessages();
+          const message = response.data.message;
+          message.written_by_me = true;
+          
+          this.$emit('messageCreated', message);
+
         }
       });
     },

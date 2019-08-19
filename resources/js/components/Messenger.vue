@@ -6,6 +6,7 @@
                 <!-- CHAT STRUCTURE -->
                 <contact-list-component 
                     v-on:conversationSelected="changeActiveConversation($event)"
+                    :conversations="conversations"
                 ></contact-list-component>
             </b-col>
 
@@ -16,6 +17,7 @@
                     :contact-id="selectedConversation.contact_id"
                     :contact-name="selectedConversation.contact.name"
                     :messages="messages"
+                    @messageCreated="addMessage($event)"
                 ></active-conversation-component>
             </b-col>
         </b-row>
@@ -29,23 +31,25 @@ export default {
     data(){
         return {
             selectedConversation: null,
-            messages: []
+            messages: [],
+            conversations: [],
         }
     },
     mounted(){
-        // Escuchando el evento por el canal 
-        Echo.channel('example').listen('MessageSent', (data) => {
 
-            const message = data.message;
-            message.written_by_me = (this.userId == message.from_id); // Agregando la propiedad written_by_me para que sea compatible con los mensajes
-            // console.log(message);
-            this.messages.push(message);   
+        this.getConversations();
+
+        // Escuchando el evento por el canal 
+        Echo.channel(`users.${this.userId}`).listen('MessageSent', (data) => {
+
+            const message = data.message;  
+            message.written_by_me = false;
+            this.addMessage(message);  
 
         });
     },
     methods: {
         changeActiveConversation(conversation){
-            // console.log('Cambiando la conver ', conversation);
             this.selectedConversation = conversation;
             this.getMessages();
         },
@@ -55,6 +59,26 @@ export default {
                 .then((response) => {
                     this.messages = response.data;
                 });
+        },
+        addMessage(message){
+
+            const conversation = this.conversations.find( (conversation) => {
+                return  conversation.contact_id == message.from_id || conversation.contact_id == message.to_id;
+            });            
+
+            const author = this.userId === message.from_id ? 'Tú' : conversation.contact_name;
+            conversation.last_message = `${author}: ${message.content}`;
+            conversation.last_time = message.created_at;
+
+            if (this.selectedConversation.contact_id == message.from_id 
+                || this.selectedConversation.contact_id == message.to_id) {
+                this.messages.push(message);  
+            }                  
+        },
+        getConversations(){
+            axios.get('/api/conversations').then((response) => {
+                this.conversations = response.data;
+            });
         },
     }
 }
