@@ -12,6 +12,7 @@ Vue.component('contact-component', require('./components/Contact.vue').default);
 Vue.component('contact-list-component', require('./components/ContactsList.vue').default);
 Vue.component('active-conversation-component', require('./components/ActiveConversation.vue').default);
 Vue.component('message-conversation-component', require('./components/MessageConversation.vue').default);
+Vue.component('conversation-status-component', require('./components/StatusComponent.vue').default);
 
 const app = new Vue({
     el: '#app',

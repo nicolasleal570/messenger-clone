@@ -40,13 +40,21 @@ export default {
         this.getConversations();
 
         // Escuchando el evento por el canal 
-        Echo.channel(`users.${this.userId}`).listen('MessageSent', (data) => {
+        Echo.private(`users.${this.userId}`).listen('MessageSent', (data) => {
 
             const message = data.message;  
             message.written_by_me = false;
             this.addMessage(message);  
 
         });
+
+        Echo.join(`messenger`)
+        .here((users) => {
+            users.forEach((user) => this.changeStatus(user, true));
+        })
+        .joining((user) => this.changeStatus(user, true))
+        .leaving((user) => this.changeStatus(user, false));
+
     },
     methods: {
         changeActiveConversation(conversation){
@@ -80,6 +88,15 @@ export default {
                 this.conversations = response.data;
             });
         },
+        changeStatus(user, status){
+            const index = this.conversations.findIndex((conversation) => {
+                return conversation.contact_id == user.id;
+            });
+
+            if(index >= 0)
+                Vue.set(this.conversations[index], 'online', status);
+        }
+
     }
 }
 </script>

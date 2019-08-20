@@ -8,7 +8,10 @@
                 ></b-img>
             </b-col>
             <b-col cols="6" align-self="center" class="d-none d-md-block">
-                <p class="mb-1">{{ conversation.contact_name }}</p>
+                <p class="mb-1">
+                    <conversation-status-component :online="conversation.online" />
+                    {{ conversation.contact_name }}
+                </p>
                 <p class="text-muted small mb-0">{{ conversation.last_message }}</p>
             </b-col>
             <b-col cols="3" align-self="center" class="d-none d-md-block">
@@ -21,8 +24,8 @@
 <script>
     export default {
         props: {
-            'variant': String,
-            'conversation': Object
+            variant: String,
+            conversation: Object
         },
         data(){
             return {
