@@ -19,6 +19,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/profile', 'UserController@edit')->name('profile');
+Route::post('/profile', 'UserController@update')->name('profile');
+
 Route::get('/api/conversations', 'ConversationController@index');
 
 Route::get('/api/messages', 'MessageController@index');

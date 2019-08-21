@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Messenger App'),
+    'name' => env('APP_NAME', 'Messenger Clone App'),
 
     /*
     |--------------------------------------------------------------------------

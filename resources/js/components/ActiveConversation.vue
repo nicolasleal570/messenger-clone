@@ -6,6 +6,7 @@
           <message-conversation-component
             v-for="message in messages"
             :key="message.id"
+            :image="message.written_by_me ? myImage : contactImage"
             :written-by-me="message.written_by_me"
           >{{ message.content }}</message-conversation-component>
         </b-card-body>
@@ -29,9 +30,9 @@
       </b-card>
     </b-col>
 
-    <b-col cols="4">
-      <b-img rounded="circle" blank width="60" height="60" blank-color="#777" alt="Person"></b-img>
-      <p>{{ contactName }}</p>
+    <b-col cols="4" class="text-center">
+      <b-img rounded="circle" width="150" height="150" class="mb-4" alt="Person" :src="contactImage"></b-img>
+      <p class="text-left">{{ contactName }}</p>
       <hr />
       <b-form-checkbox>Desactivar notificaciones</b-form-checkbox>
     </b-col>
@@ -49,7 +50,9 @@ export default {
   props: {
     contactId: Number,
     contactName: String,
-    messages: Array
+    messages: Array,
+    contactImage: String,
+    myImage: String
   },
   data() {
     return {

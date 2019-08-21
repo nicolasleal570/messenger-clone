@@ -1,9 +1,7 @@
 <template>
         <b-media :right-align="writtenByMe" vertical-align="center" class="my-3">
             <b-img slot="aside"
-                rounded="circle"
-                blank width="60" height="60"
-                blank-color="#777" alt="Person"    
+                rounded="circle" width="60" height="60" alt="Person" :src="image" 
             ></b-img>
 
             <b-card>
@@ -17,6 +15,7 @@
 export default {
     props: {
         writtenByMe: Boolean,
+        image: String,
     },
     data(){
         return{

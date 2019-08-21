@@ -1,23 +1,13 @@
 <template>  
-    <div>
-        <b-form>
-            <b-form-group>
-                <b-form-input class="text-center"
-                    type="text"
-                    placeholder="Buscar Contacto"
-                ></b-form-input>
-            </b-form-group>
-        </b-form>
-
-        <b-list-group>
-                <contact-component 
-                    v-for="conversation in conversations"
-                    :key="conversation.id"
-                    :conversation="conversation"
-                    @click.native="selectConversation(conversation)"
-                ></contact-component>
-        </b-list-group>
-    </div>
+    <b-list-group>
+            <contact-component 
+                v-for="conversation in conversations"
+                :key="conversation.id"
+                :conversation="conversation"
+                :selected="selectedConversationId === conversation.id"
+                @click.native="selectConversation(conversation)"
+            ></contact-component>
+    </b-list-group>
 </template>
 <script>
 export default {
@@ -26,6 +16,7 @@ export default {
         },
         data(){
             return {
+                selectedConversationId: null
             }
         },
         mounted(){
@@ -33,8 +24,8 @@ export default {
         },
         methods: {
             selectConversation(conversation){
-                this.$emit('conversationSelected', conversation); // Evento que se emite
-                
+                this.selectedConversationId = conversation.id;
+                this.$emit('conversationSelected', conversation); // Evento que se emite                
             }
         }
     }
