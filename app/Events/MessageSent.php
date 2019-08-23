@@ -34,6 +34,6 @@ class MessageSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('users.' . $this->message->to_id);
+        return new PrivateChannel('users.' . $this->message->to_id);
     }
 }

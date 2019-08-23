@@ -39,10 +39,10 @@ export default {
 
         // Escuchando el evento por el canal 
         Echo.private(`users.${this.user.id}`)
-            .listen('MessageSent', (data) => {
+            .listen('MessageSent', (data) => {                
 
                 const message = data.message;  
-                message.written_by_me = false;
+                message.written_by_me = false;                
                 this.addMessage(message);  
 
         });
@@ -56,7 +56,7 @@ export default {
 
     },
     methods: {
-        changeStatus(user, status){
+        changeStatus(user, status){            
             const index = this.$store.state.conversations.findIndex((conversation) => {
                 return conversation.contact_id == user.id;
             });
@@ -64,7 +64,7 @@ export default {
             if(index >= 0)
                 this.$set(this.$store.state.conversations[index], 'online', status);
         }, 
-        addMessage(message){
+        addMessage(message){            
             this.$store.commit('addMessage', message);
         }
     },
