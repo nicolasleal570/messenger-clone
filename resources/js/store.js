@@ -24,6 +24,9 @@ export default new Vuex.Store({
             });
 
             const author = state.user.id === message.from_id ? 'Tú' : conversation.contact_name;
+
+            console.log(conversation);
+
             conversation.last_message = `${author}: ${message.content}`;
             conversation.last_time = message.created_at;
 
@@ -45,16 +48,17 @@ export default new Vuex.Store({
     actions: {
         getMessages(context, conversation) {
             // Obteniendo los mensajes
-            axios.get(`/api/messages?contact_id=${conversation.contact_id}`)
+            return axios.get(`/api/messages?contact_id=${conversation.contact_id}`)
                 .then((response) => {
                     context.commit('newMessagesList', response.data);
                     context.commit('selectConversation', conversation);
                 });
         },
         getConversations(context) {
-            axios.get('/api/conversations').then((response) => {
-                context.commit('newConversationsList', response.data);
-            });
+            return axios.get('/api/conversations')
+                .then((response) => {
+                    context.commit('newConversationsList', response.data);
+                });
         },
         postMessage(context, newMessage) {
             const params = {
@@ -62,15 +66,16 @@ export default new Vuex.Store({
                 content: newMessage
             };
 
-            axios.post("/api/messages", params).then(response => {
-                if (response.data.success) {
-                    newMessage = "";
-                    const message = response.data.message;
-                    message.written_by_me = true;
+            return axios.post("/api/messages", params)
+                .then(response => {
+                    if (response.data.success) {
+                        newMessage = "";
+                        const message = response.data.message;
+                        message.written_by_me = true;
 
-                    context.commit("addMessage", message);
-                }
-            });
+                        context.commit("addMessage", message);
+                    }
+                });
         }
     },
     getters: {
@@ -80,5 +85,10 @@ export default new Vuex.Store({
                 .toLowerCase()
                 .includes(state.querySearch.toLowerCase()));
         },
+        getConversationById(state) {
+            return function(conversationId) {
+                return state.conversations.find(conversation => conversation.id == conversationId);
+            }
+        }
     }
 });

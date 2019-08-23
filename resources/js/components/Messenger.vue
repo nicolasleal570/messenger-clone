@@ -27,15 +27,23 @@ export default {
     mounted(){
 
         this.$store.commit('setUser', this.user);
+        this.$store.dispatch('getConversations')
+                    .then(() => {
+                        const conversationId = this.$route.params.conversationId;
 
-        this.$store.dispatch('getConversations');
+                        if (conversationId) {
+                            const conversation = this.$store.getters.getConversationById(conversationId); 
+                            this.$store.dispatch('getMessages', conversation);
+                        }
+                    });
 
         // Escuchando el evento por el canal 
-        Echo.private(`users.${this.user.id}`).listen('MessageSent', (data) => {
+        Echo.private(`users.${this.user.id}`)
+            .listen('MessageSent', (data) => {
 
-            const message = data.message;  
-            message.written_by_me = false;
-            this.addMessage(message);  
+                const message = data.message;  
+                message.written_by_me = false;
+                this.addMessage(message);  
 
         });
 
@@ -55,8 +63,10 @@ export default {
 
             if(index >= 0)
                 this.$set(this.$store.state.conversations[index], 'online', status);
+        }, 
+        addMessage(message){
+            this.$store.commit('addMessage', message);
         }
-
     },
     computed: {
         selectedConversation(){
