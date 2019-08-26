@@ -25,8 +25,6 @@ export default new Vuex.Store({
 
             const author = state.user.id === message.from_id ? 'Tú' : conversation.contact_name;
 
-            console.log(conversation);
-
             conversation.last_message = `${author}: ${message.content}`;
             conversation.last_time = message.created_at;
 

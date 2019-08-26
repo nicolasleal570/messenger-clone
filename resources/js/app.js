@@ -10,7 +10,7 @@ Vue.use(VueRouter);
 
 // IMPORT OF COMPONENTS
 import MessengerComponent from './components/Messenger.vue';
-import ExampleComponent from './components/ExampleComponent.vue';
+import MessengerWelcomeComponent from './components/MessengerWelcome.vue';
 
 //Vue.component('messenger-component', require('./components/Messenger.vue').default);
 Vue.component('contact-component', require('./components/Contact.vue').default);
@@ -20,12 +20,10 @@ Vue.component('message-conversation-component', require('./components/MessageCon
 Vue.component('conversation-status-component', require('./components/StatusComponent.vue').default);
 Vue.component('user-profile-component', require('./components/UserProfile.vue').default);
 Vue.component('contact-form-component', require('./components/SearchContactBar.vue').default);
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 const routes = [
-    { path: '/chat', component: MessengerComponent },
+    { path: '/chat', component: MessengerWelcomeComponent },
     { path: '/chat/:conversationId', component: MessengerComponent },
-    { path: '/example', component: ExampleComponent },
 ];
 
 const router = new VueRouter({
